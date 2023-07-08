@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Gamemanager : MonoBehaviour
 {
-    
+
     [Header("Player item")]
     public GameObject PlayerObj;
     public CanvasGroup PlayerButtonCanvas;
@@ -49,7 +49,7 @@ public class Gamemanager : MonoBehaviour
 
     private void Awake()
     {
-        for(int i = 0; i < RoadParent.transform.childCount; i++)
+        for (int i = 0; i < RoadParent.transform.childCount; i++)
         {
             RoadList.Add(RoadParent.transform.GetChild(i).GetComponent<RectTransform>());
         }
@@ -72,7 +72,7 @@ public class Gamemanager : MonoBehaviour
     {
 
 
-        if(TruckAdded)
+        if (TruckAdded)
         {
             return;
         }
@@ -124,17 +124,36 @@ public class Gamemanager : MonoBehaviour
             dataIndex = 0;
             if (Level % 2 == 0)
             {
-                for(int i =0; i < Trucks.Count; i++)
+                for (int i = 0; i < Trucks.Count; i++)
                 {
                     Trucks[i].SetInMotion();
                 }
 
+                TimerTemp = TimeFirst;
             }
             else
             {
+
+
+                if (Level == 1)
+                {
+                    TimeFirst = TimerTemp;
+                }
+                else
+                {
+                    for (int i = 0; i < Trucks.Count; i++)
+                    {
+                        Trucks[i].SetInMotion();
+                    }
+
+                    TimerTemp = TimeFirst;
+                    PlayerIndexY = 0;
+                    PlayerIndexX = 4;
+                }
+
                 SavedData.Clear();
                 PlayerSaving temp = new PlayerSaving();
-                temp.TimeToSave = TimerTemp;
+                temp.TimeToSave = 0;
                 temp.PositionToSave = PlayerObj.transform.localPosition;
                 SavedData.Add(temp);
             }
@@ -155,7 +174,7 @@ public class Gamemanager : MonoBehaviour
         if (!left)
         {
             PlayerIndexX++;
-            if(PlayerIndexX >= XRoad.Count)
+            if (PlayerIndexX >= XRoad.Count)
             {
                 PlayerIndexX = XRoad.Count - 1;
             }
@@ -169,12 +188,21 @@ public class Gamemanager : MonoBehaviour
                 PlayerIndexX = 0;
             }
         }
+        float RealTimer;
+        if (Level == 1)
+        {
+            RealTimer = TimerTemp;
+        }
+        else
+        {
+            RealTimer = TimeFirst - TimerTemp;
+        }
 
 
         PlayerObj.transform.localPosition = new Vector2(XRoad[PlayerIndexX].transform.localPosition.x, RoadList[PlayerIndexY].transform.localPosition.y);
 
         PlayerSaving temp = new PlayerSaving();
-        temp.TimeToSave = TimerTemp;
+        temp.TimeToSave = RealTimer;
         temp.PositionToSave = PlayerObj.transform.localPosition;
         SavedData.Add(temp);
     }
@@ -184,30 +212,40 @@ public class Gamemanager : MonoBehaviour
     public void PlayerJump()
     {
 
-        if(ChickenCouldntReach || GameEnded)
+        if (ChickenCouldntReach || GameEnded)
         {
             return;
         }
 
         PlayerIndexY++;
-        if(PlayerIndexY >= RoadList.Count)
+        if (PlayerIndexY >= RoadList.Count)
         {
             Debug.Log("GameOver");
             return;
         }
 
-        PlayerObj.transform.localPosition = new Vector2(XRoad[PlayerIndexX].transform.localPosition.x, RoadList[PlayerIndexY].transform.localPosition.y);
+        float RealTimer;
+        if (Level == 1)
+        {
+            RealTimer = TimerTemp;
+        }
+        else
+        {
+            RealTimer = TimeFirst - TimerTemp;
+        }
+
+
+            PlayerObj.transform.localPosition = new Vector2(XRoad[PlayerIndexX].transform.localPosition.x, RoadList[PlayerIndexY].transform.localPosition.y);
         PlayerSaving temp = new PlayerSaving();
-        temp.TimeToSave = TimerTemp;
+        temp.TimeToSave = RealTimer;
         temp.PositionToSave = PlayerObj.transform.localPosition;
         SavedData.Add(temp);
 
-        if (PlayerIndexY >= RoadList.Count-1)
+        if (PlayerIndexY >= RoadList.Count - 1)
         {
-            GameEnded=true;
+            GameEnded = true;
             Debug.Log("GameOver");
-
-            if(Level == 1)
+            if (Level == 1)
             {
                 TimeFirst = TimerTemp;
             }
@@ -235,7 +273,7 @@ public class Gamemanager : MonoBehaviour
     {
 
 
-        if(ChickenCouldntReach)
+        if (ChickenCouldntReach)
         {
 
             Debug.Log("Run Over");
@@ -246,7 +284,7 @@ public class Gamemanager : MonoBehaviour
         Level++;
 
 
-        
+
 
         if (Level % 2 == 0)
         {
@@ -296,7 +334,7 @@ public class Gamemanager : MonoBehaviour
             }
 
             int previous = dataIndex - 1;
-            if(previous < 0)
+            if (previous < 0)
             {
                 previous = 0;
             }
@@ -327,22 +365,22 @@ public class Gamemanager : MonoBehaviour
     void Update()
     {
 
-        if(ChickenCouldntReach)
+        if (ChickenCouldntReach)
         {
             return;
         }
 
 
 
-        if (GameEnded )
+        if (GameEnded)
         {
 
             return;
         }
 
-            LevelText.text = Level.ToString(); 
-        
-        if(Level == 1)
+        LevelText.text = Level.ToString();
+
+        if (Level == 1)
         {
             if (!GameEnded)
             {
@@ -373,13 +411,13 @@ public class Gamemanager : MonoBehaviour
 
             if (Level % 2 == 0)
             {
-                if ( ( TimeFirst-TimerTemp) >= SavedData[dataIndex].TimeToSave)
+                if ((TimeFirst - TimerTemp) >= SavedData[dataIndex].TimeToSave)
                 {
                     PlayerObj.transform.localPosition = SavedData[dataIndex].PositionToSave;
                     dataIndex++;
                 }
 
-                if(dataIndex >= SavedData.Count)
+                if (dataIndex >= SavedData.Count)
                 {
                     GameEnded = true;
                     Debug.Log("Run over");
