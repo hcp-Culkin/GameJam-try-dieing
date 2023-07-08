@@ -8756,7 +8756,7 @@ MonoBehaviour:
   onInteraction:
     m_PersistentCalls:
       m_Calls: []
-  gamemanager: {fileID: 0}
+  gamemanager: {fileID: 596365414}
   Delay: 0
   FromMarker: {fileID: 0}
   ToMarker: {fileID: 0}
