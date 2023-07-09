@@ -22,6 +22,7 @@ public class ItemButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (SelectedButton == this) return;
         SelectedButton?.Deselect();
         Select();
     }

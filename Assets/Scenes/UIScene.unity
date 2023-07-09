@@ -785,6 +785,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 501794626}
+  - component: {fileID: 501794627}
   m_Layer: 5
   m_Name: ItemPlacer
   m_TagString: Untagged
@@ -814,6 +815,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &501794627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501794625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9b402af189716b4da8b115ce8508637, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemSprites:
+  - itemType: 0
+    sprite: {fileID: 7482667652216324306, guid: cbc82489ac00319468ed5419edc10b5b, type: 3}
+    prefab: {fileID: 0}
+  scroll: {fileID: 375024815}
+  tmpItems: 00000000
 --- !u!1 &506029195
 GameObject:
   m_ObjectHideFlags: 0
@@ -5314,7 +5333,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059236279300284914, guid: 0452d7f2edec91f41a7a1900db432ce1, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8059236279300284914, guid: 0452d7f2edec91f41a7a1900db432ce1, type: 3}
       propertyPath: m_AnchorMin.x
@@ -5322,7 +5341,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059236279300284914, guid: 0452d7f2edec91f41a7a1900db432ce1, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8059236279300284914, guid: 0452d7f2edec91f41a7a1900db432ce1, type: 3}
       propertyPath: m_SizeDelta.x
@@ -5362,11 +5381,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059236279300284914, guid: 0452d7f2edec91f41a7a1900db432ce1, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 82.2971
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8059236279300284914, guid: 0452d7f2edec91f41a7a1900db432ce1, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8059236279300284914, guid: 0452d7f2edec91f41a7a1900db432ce1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
