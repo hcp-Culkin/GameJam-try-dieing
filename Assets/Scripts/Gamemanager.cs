@@ -22,7 +22,6 @@ public class Gamemanager : MonoBehaviour
     [Header("Game item")]
     public GameObject RoadParent;
     private List<RectTransform> RoadList = new List<RectTransform>();
-    public GameObject XRoadParent;
     private List<RectTransform> XRoad = new List<RectTransform>();
 
     private List<TruckControls> Trucks = new List<TruckControls>();
@@ -55,9 +54,9 @@ public class Gamemanager : MonoBehaviour
         {
             RoadList.Add(RoadParent.transform.GetChild(i).GetComponent<RectTransform>());
         }
-        for (int i = 0; i < XRoadParent.transform.childCount; i++)
+        for (int i = 0; i < RoadParent.transform.GetChild(0).transform.childCount; i++)
         {
-            XRoad.Add(XRoadParent.transform.GetChild(i).GetComponent<RectTransform>());
+            XRoad.Add(RoadParent.transform.GetChild(0).transform.GetChild(i).GetComponent<RectTransform>());
         }
         StartSize = PlayerObj.transform.localScale;
         PlayerIndexX = 4;
@@ -386,6 +385,22 @@ public class Gamemanager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+        if(Input.GetKeyUp(KeyCode.W))
+        {
+            PlayerJump();
+        }
+        if(Input.GetKeyUp(KeyCode.A))
+        {
+            MovePlayer(true);
+        }
+        if(Input.GetKeyUp(KeyCode.D))
+        {
+            MovePlayer(false);
+        }
+
+
 
         if (ChickenCouldntReach)
         {
