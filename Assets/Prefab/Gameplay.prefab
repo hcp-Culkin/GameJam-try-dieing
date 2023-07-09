@@ -270,10 +270,10 @@ RectTransform:
   m_Father: {fileID: 6346414087666309426}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20, y: -14}
-  m_SizeDelta: {x: -294.92, y: -43.54}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6346414086307290749
 CanvasRenderer:
@@ -962,7 +962,6 @@ MonoBehaviour:
   PlayerButtonCanvas: {fileID: 6346414086229750003}
   Truck: {fileID: 6346414086666825480}
   RoadParent: {fileID: 6346414086307290743}
-  XRoadParent: {fileID: 0}
   SavedData: []
   TimerText: {fileID: 0}
   LevelText: {fileID: 0}
