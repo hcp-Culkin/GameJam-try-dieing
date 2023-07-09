@@ -32,7 +32,6 @@ public class Gamemanager : MonoBehaviour
     bool TruckAdded;
 
     private float TimerTemp = 0;
-    private float TimeFirst;
     private int Level = 0;
     private bool GameEnded = true;
     private bool ChickenCouldntReach = false;
@@ -137,27 +136,22 @@ public class Gamemanager : MonoBehaviour
                     Trucks[i].SetInMotion();
                 }
 
-                TimerTemp = TimeFirst;
+                TimerTemp = 0;
             }
             else
             {
 
+                TimerTemp = 0;
 
-                if (Level == 1)
-                {
-                    TimeFirst = TimerTemp;
-                }
-                else
-                {
-                    for (int i = 0; i < Trucks.Count; i++)
-                    {
-                        Trucks[i].SetInMotion();
-                    }
 
-                    TimerTemp = TimeFirst;
-                    PlayerIndexY = 0;
-                    PlayerIndexX = 4;
+                for (int i = 0; i < Trucks.Count; i++)
+                {
+                    Trucks[i].SetInMotion();
                 }
+
+                PlayerIndexY = 0;
+                PlayerIndexX = 4;
+                
 
                 SavedData.Clear();
                 PlayerSaving temp = new PlayerSaving();
@@ -196,21 +190,21 @@ public class Gamemanager : MonoBehaviour
                 PlayerIndexX = 0;
             }
         }
-        float RealTimer;
-        if (Level == 1)
-        {
-            RealTimer = TimerTemp;
-        }
-        else
-        {
-            RealTimer = TimeFirst - TimerTemp;
-        }
+        //float RealTimer;
+        //if (Level == 1)
+        //{
+        //    RealTimer = TimerTemp;
+        //}
+        //else
+        //{
+        //    RealTimer = TimeFirst - TimerTemp;
+        //}
 
 
         PlayerObj.transform.localPosition = new Vector2(XRoad[PlayerIndexX].transform.localPosition.x, RoadList[PlayerIndexY].transform.localPosition.y);
 
         PlayerSaving temp = new PlayerSaving();
-        temp.TimeToSave = RealTimer;
+        temp.TimeToSave = TimerTemp;
         temp.PositionToSave = PlayerObj.transform.localPosition;
         SavedData.Add(temp);
     }
@@ -232,20 +226,20 @@ public class Gamemanager : MonoBehaviour
             return;
         }
 
-        float RealTimer;
-        if (Level == 1)
-        {
-            RealTimer = TimerTemp;
-        }
-        else
-        {
-            RealTimer = TimeFirst - TimerTemp;
-        }
+        //float RealTimer;
+        //if (Level == 1)
+        //{
+        //    RealTimer = TimerTemp;
+        //}
+        //else
+        //{
+        //    RealTimer = TimeFirst - TimerTemp;
+        //}
 
 
             PlayerObj.transform.localPosition = new Vector2(XRoad[PlayerIndexX].transform.localPosition.x, RoadList[PlayerIndexY].transform.localPosition.y);
         PlayerSaving temp = new PlayerSaving();
-        temp.TimeToSave = RealTimer;
+        temp.TimeToSave = TimerTemp;
         temp.PositionToSave = PlayerObj.transform.localPosition;
         SavedData.Add(temp);
 
@@ -253,14 +247,6 @@ public class Gamemanager : MonoBehaviour
         {
             GameEnded = true;
             Debug.Log("GameOver");
-            if (Level == 1)
-            {
-                TimeFirst = TimerTemp;
-            }
-            else
-            {
-                TimerTemp = TimeFirst;
-            }
 
             CheckGameover();
         }
@@ -316,7 +302,7 @@ public class Gamemanager : MonoBehaviour
 
 
             TruckTimeCheck.minValue = -0.1f;
-            TruckTimeCheck.maxValue = TimeFirst;
+            TruckTimeCheck.maxValue = TimerTemp;
 
             ChickenWalk.alpha = 0;
             ChickenWalk.blocksRaycasts = false;
@@ -417,12 +403,14 @@ public class Gamemanager : MonoBehaviour
 
         LevelText.text = Level.ToString();
 
+        if (!GameEnded)
+        {
+            TimerTemp += Time.deltaTime;
+        }
+
         if (Level == 1)
         {
-            if (!GameEnded)
-            {
-                TimerTemp += Time.deltaTime;
-            }
+
             DisplayTime(TimerTemp);
 
             return;
@@ -431,24 +419,19 @@ public class Gamemanager : MonoBehaviour
         if (Level > 1)
         {
 
-            if (!GameEnded)
-            {
-                TimerTemp -= Time.deltaTime;
-
-            }
-            if (TimerTemp <= 0)
-            {
-                GameEnded = true;
-                ChickenCouldntReach = true;
-                CheckGameover();
-                return;
-            }
+            //if (TimerTemp <= 0)
+            //{
+            //    GameEnded = true;
+            //    ChickenCouldntReach = true;
+            //    CheckGameover();
+            //    return;
+            //}
             DisplayTime(TimerTemp);
 
 
             if (Level % 2 == 0)
             {
-                if ((TimeFirst - TimerTemp) >= SavedData[dataIndex].TimeToSave)
+                if ((TimerTemp) >= SavedData[dataIndex].TimeToSave)
                 {
                     PlayerObj.transform.localPosition = SavedData[dataIndex].PositionToSave;
                     dataIndex++;
