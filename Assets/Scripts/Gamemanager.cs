@@ -19,13 +19,15 @@ public class Gamemanager : MonoBehaviour
     //  public CanvasGroup PlayerButtonCanvas;
 
     public CanvasGroup RestartScreen;
+    public Image ChickenImage;
+    public Sprite[] ChickenSprite;
     private int PlayerIndexY = 0;
     private int PlayerIndexX = 0;
     private Vector2 StartSize;
     private bool playerMoving;
     private int FinalX;
     public GameObject Truck;
-
+    public TextMeshProUGUI LevelText;
 
     [Header("Game item")]
     public GameObject RoadParent;
@@ -87,6 +89,7 @@ public class Gamemanager : MonoBehaviour
     public void StartGame()
     {
         PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
+        PlayerObj.SetActive(true);
 
         if (GameEnded)
         {
@@ -152,6 +155,10 @@ public class Gamemanager : MonoBehaviour
                 PlayerIndexX = 0;
             }
         }
+
+
+        PlayerObj.GetComponent<AudioSource>().Play();
+
         //float RealTimer;
         //if (Level == 1)
         //{
@@ -177,6 +184,7 @@ public class Gamemanager : MonoBehaviour
             {
                 GameEnded = true;
                 Debug.Log("GameOver");
+                GetComponent<AudioSource>().Play();
 
                 CheckGameover();
             }
@@ -200,6 +208,11 @@ public class Gamemanager : MonoBehaviour
         {
             PlayerIndexY = RoadList.Count - 1;
         }
+        else
+        {
+           // PlayerObj.GetComponent<AudioSource>().Stop();
+            PlayerObj.GetComponent<AudioSource>().Play();
+        }
 
         //float RealTimer;
         //if (Level == 1)
@@ -224,6 +237,8 @@ public class Gamemanager : MonoBehaviour
             {
                 GameEnded = true;
                 Debug.Log("GameOver");
+
+                GetComponent<AudioSource>().Play();
 
                 CheckGameover();
             }
@@ -250,9 +265,8 @@ public class Gamemanager : MonoBehaviour
 
     public void Restart()
     {
-
         ItemPlacer.Instance.StopMovement();
-
+        
 
         if (Level % 2 == 0)
         {
@@ -278,13 +292,15 @@ public class Gamemanager : MonoBehaviour
         RestartScreen.interactable = false;
         RestartScreen.blocksRaycasts = false;
         PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
+        PlayerObj.SetActive(true);
+
 
     }
 
 
     public void CheckGameover()
     {
-
+        PlayerObj.SetActive(false);
         ItemPlacer.Instance.StopMovement();
 
         if (ChickenCouldntReach)
@@ -300,6 +316,18 @@ public class Gamemanager : MonoBehaviour
             RestartScreen.alpha = 1;
             RestartScreen.interactable = true;
             RestartScreen.blocksRaycasts = true;
+
+            if (Level % 2 == 0)
+            {
+                ChickenImage.sprite = ChickenSprite[0];
+                RestartScreen.transform.GetChild(0).GetComponent<AudioSource>().Play();
+            }
+            else
+            {
+                RestartScreen.GetComponent<AudioSource>().Play();
+                ChickenImage.sprite = ChickenSprite[1];
+            }
+
 
             return;
         }
@@ -335,7 +363,7 @@ public class Gamemanager : MonoBehaviour
         }
 
 
-       // PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
+       //PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
 
 
 
@@ -413,7 +441,7 @@ public class Gamemanager : MonoBehaviour
             return;
         }
 
-        // LevelText.text = Level.ToString();
+         LevelText.text = "Score : " +(Level/2).ToString();
 
         if (!GameEnded)
         {

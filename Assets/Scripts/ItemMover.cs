@@ -68,6 +68,8 @@ public class ItemMover : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             FindObjectOfType<Gamemanager>().DieChickenDie();
+            GetComponent<AudioSource>().Play();
+
         }
     }
 }
