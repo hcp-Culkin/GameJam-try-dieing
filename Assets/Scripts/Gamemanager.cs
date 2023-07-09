@@ -86,9 +86,7 @@ public class Gamemanager : MonoBehaviour
 
     public void StartGame()
     {
-        FinalX = UnityEngine.Random.Range(0, XRoad.Count);
         PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
-        Home.transform.localPosition = new Vector2(XRoad[FinalX].transform.localPosition.x, RoadList[RoadList.Count-1].transform.localPosition.y);
 
         if (GameEnded)
         {
@@ -104,6 +102,9 @@ public class Gamemanager : MonoBehaviour
             }
             else
             {
+                FinalX = UnityEngine.Random.Range(0, XRoad.Count);
+                Home.transform.localPosition = new Vector2(XRoad[FinalX].transform.localPosition.x, RoadList[RoadList.Count - 1].transform.localPosition.y);
+
                 TimerTemp = 0;
 
                 PlayerIndexY = 0;
