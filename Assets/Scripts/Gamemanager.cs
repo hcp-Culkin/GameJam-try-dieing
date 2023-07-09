@@ -11,14 +11,19 @@ public class Gamemanager : MonoBehaviour
     [Header("UI")]
     [SerializeField] TextMeshProUGUI objectiveText;
     [SerializeField] Button playButton;
+    [SerializeField] ItemTypesEnum[] tmpItems;
 
     [Header("Player item")]
     public GameObject PlayerObj;
-    public CanvasGroup PlayerButtonCanvas;
+    public GameObject Home;
+    //  public CanvasGroup PlayerButtonCanvas;
+
+    public CanvasGroup RestartScreen;
     private int PlayerIndexY = 0;
     private int PlayerIndexX = 0;
     private Vector2 StartSize;
     private bool playerMoving;
+    private int FinalX;
     public GameObject Truck;
 
 
@@ -40,6 +45,11 @@ public class Gamemanager : MonoBehaviour
 
     private void Awake()
     {
+
+        RestartScreen.alpha = 0;
+        RestartScreen.interactable = false;
+        RestartScreen.blocksRaycasts = false;
+
         for (int i = 0; i < RoadParent.transform.childCount; i++)
         {
             RoadList.Add(RoadParent.transform.GetChild(i).GetComponent<RectTransform>());
@@ -76,9 +86,9 @@ public class Gamemanager : MonoBehaviour
 
     public void StartGame()
     {
-
+        FinalX = UnityEngine.Random.Range(0, XRoad.Count);
         PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
-
+        Home.transform.localPosition = new Vector2(XRoad[FinalX].transform.localPosition.x, RoadList[RoadList.Count-1].transform.localPosition.y);
 
         if (GameEnded)
         {
@@ -118,7 +128,7 @@ public class Gamemanager : MonoBehaviour
     public void MovePlayer(bool left = false)
     {
 
-        if (ChickenCouldntReach || GameEnded)
+        if (ChickenCouldntReach || GameEnded || (Level % 2 == 0))
         {
             return;
         }
@@ -158,6 +168,19 @@ public class Gamemanager : MonoBehaviour
         temp.TimeToSave = TimerTemp;
         temp.PositionToSave = PlayerObj.transform.localPosition;
         SavedData.Add(temp);
+
+
+        if (PlayerIndexY >= RoadList.Count - 1)
+        {
+            if (PlayerIndexX == FinalX)
+            {
+                GameEnded = true;
+                Debug.Log("GameOver");
+
+                CheckGameover();
+            }
+        }
+
     }
 
 
@@ -165,16 +188,16 @@ public class Gamemanager : MonoBehaviour
     public void PlayerJump()
     {
 
-        if (ChickenCouldntReach || GameEnded)
+        if (ChickenCouldntReach || GameEnded || (Level % 2 == 0))
         {
             return;
         }
 
         PlayerIndexY++;
+
         if (PlayerIndexY >= RoadList.Count)
         {
-            Debug.Log("GameOver");
-            return;
+            PlayerIndexY = RoadList.Count - 1;
         }
 
         //float RealTimer;
@@ -196,10 +219,13 @@ public class Gamemanager : MonoBehaviour
 
         if (PlayerIndexY >= RoadList.Count - 1)
         {
-            GameEnded = true;
-            Debug.Log("GameOver");
+            if (PlayerIndexX == FinalX)
+            {
+                GameEnded = true;
+                Debug.Log("GameOver");
 
-            CheckGameover();
+                CheckGameover();
+            }
         }
         // pla
 
@@ -215,9 +241,43 @@ public class Gamemanager : MonoBehaviour
     }
 
 
+    //public void Restart()
+    //{
+    //    SceneManager.LoadScene(0);
+    //}
+
+
     public void Restart()
     {
-        SceneManager.LoadScene(0);
+
+        ItemPlacer.Instance.StopMovement();
+
+
+        if (Level % 2 == 0)
+        {
+            SetObjectiveText("Kill Chicken");
+            // truck play through
+            ItemPlacer.Instance.ClearButton();
+            ItemPlacer.Instance.PlacementUI.SetActive(true);
+            ItemPlacer.Instance.SetUpDisplay(tmpItems);
+
+            dataIndex = 0;
+            RoadParent.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        }
+        else
+        {
+            SetObjectiveText("Cross the Road");
+            // chicken playthrough
+            playButton.interactable = true;
+            ItemPlacer.Instance.PlacementUI.SetActive(false);
+            RoadParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        }
+        ChickenCouldntReach=false;
+        RestartScreen.alpha = 0;
+        RestartScreen.interactable = false;
+        RestartScreen.blocksRaycasts = false;
+        PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
+
     }
 
 
@@ -225,10 +285,20 @@ public class Gamemanager : MonoBehaviour
     {
 
         ItemPlacer.Instance.StopMovement();
+
         if (ChickenCouldntReach)
         {
 
-            Debug.Log("Run Over");
+            Debug.Log("Truck faild to run you over");
+
+            // ill call the retry ui !
+            // reset the trucks 
+            // reset the player
+
+            // check for current level
+            RestartScreen.alpha = 1;
+            RestartScreen.interactable = true;
+            RestartScreen.blocksRaycasts = true;
 
             return;
         }
@@ -242,21 +312,29 @@ public class Gamemanager : MonoBehaviour
         {
             SetObjectiveText("Kill Chicken");
 
+            // truck play through
+
+            ItemPlacer.Instance.PlacementUI.SetActive(true);
+            ItemPlacer.Instance.SetUpDisplay(tmpItems);
             dataIndex = 0;
-            PlayerButtonCanvas.alpha = 0;
-            PlayerButtonCanvas.blocksRaycasts = false;
+           // PlayerButtonCanvas.alpha = 0;
+          //  PlayerButtonCanvas.blocksRaycasts = false;
             RoadParent.GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
         else
         {
-            PlayerButtonCanvas.alpha = 1;
-            PlayerButtonCanvas.blocksRaycasts = true;
+            SetObjectiveText("Cross the Road");
+            // chicken playthrough
+            playButton.interactable = true;
+            ItemPlacer.Instance.PlacementUI.SetActive(false);
+          //  PlayerButtonCanvas.alpha = 1;
+          //  PlayerButtonCanvas.blocksRaycasts = true;
             RoadParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
         }
 
 
-        PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
+       // PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
 
 
 

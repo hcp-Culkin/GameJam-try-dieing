@@ -10,7 +10,6 @@ public class ItemPlacer : MonoBehaviour
     public GameObject PlacementUI;
     [SerializeField] ItemPlacerSpriteHelper[] itemSprites;
     [SerializeField] ScrollRect scroll;
-    [SerializeField] ItemTypesEnum[] tmpItems;
     [SerializeField] Transform placementTransform;
     [SerializeField] Button playButton;
     List<ItemTypesEnum> itemsToPlace = new List<ItemTypesEnum>();
@@ -103,7 +102,7 @@ public class ItemPlacer : MonoBehaviour
             placementTransform.GetChild(i).GetComponent<ItemMover>().ResetMovement();
         }
 
-        SetUpDisplay(tmpItems); //TODO: Pass in from game manager instead of here
+       // SetUpDisplay(tmpItems); //TODO: Pass in from game manager instead of here
     }
 
     Dictionary<GameObject, ItemTypesEnum> clearList;

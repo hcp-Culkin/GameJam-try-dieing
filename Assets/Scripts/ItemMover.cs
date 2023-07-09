@@ -25,6 +25,7 @@ public class ItemMover : MonoBehaviour
 
     public void ResetMovement()
     {
+        transform.DOKill();
         if (movingRoutine != null)
         {
             StopCoroutine(movingRoutine);
