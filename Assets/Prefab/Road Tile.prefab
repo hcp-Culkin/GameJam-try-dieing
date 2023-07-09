@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 527266464072175531}
   - component: {fileID: 1310062372045865011}
   - component: {fileID: 4749470886579658714}
+  - component: {fileID: 2196622590522029125}
   m_Layer: 5
   m_Name: Road Tile
   m_TagString: Untagged
@@ -120,4 +121,29 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1310062372045865011}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2196622590522029125}
+        m_TargetAssemblyTypeName: TileFunction, Assembly-CSharp
+        m_MethodName: OnItemPlacer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2196622590522029125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078295775191630071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e2957f1f9941f842b6543776f2ac7a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemPlacer: {fileID: 0}

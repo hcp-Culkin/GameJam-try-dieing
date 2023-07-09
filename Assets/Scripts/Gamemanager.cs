@@ -24,27 +24,15 @@ public class Gamemanager : MonoBehaviour
     private List<RectTransform> RoadList = new List<RectTransform>();
     private List<RectTransform> XRoad = new List<RectTransform>();
 
-    private List<TruckControls> Trucks = new List<TruckControls>();
-
-
     public List<PlayerSaving> SavedData = new List<PlayerSaving>();
     private int dataIndex = 0;
-    bool TruckAdded;
 
     private float TimerTemp = 0;
     private int Level = 0;
     private bool GameEnded = true;
     private bool ChickenCouldntReach = false;
-    [Header("Hud item")]
-    public TextMeshProUGUI TimerText;
-    public TextMeshProUGUI LevelText;
-
-
-    public CanvasGroup ChickenWalk;
-    public CanvasGroup TruckPlace;
-    public Slider TruckTimeCheck;
-
-    public CanvasGroup Gameover;
+   // public TextMeshProUGUI TimerText;
+   // public TextMeshProUGUI LevelText;
 
 
     private void Awake()
@@ -65,31 +53,6 @@ public class Gamemanager : MonoBehaviour
 
     }
 
-
-
-
-    public void ButtonClick(Transform transformObj)
-    {
-
-
-        if (TruckAdded)
-        {
-            return;
-        }
-
-        Transform marker = transformObj.GetChild(0);
-
-        GameObject TempTruck = GameObject.Instantiate(Truck);
-        TempTruck.transform.SetParent(transformObj.transform);
-        TempTruck.transform.localScale = Truck.transform.localScale;
-        TempTruck.transform.localPosition = marker.localPosition;
-        TempTruck.GetComponent<TruckControls>().FromMarker = transformObj.GetChild(0);
-        TempTruck.GetComponent<TruckControls>().ToMarker = transformObj.GetChild(1);
-        TempTruck.GetComponent<TruckControls>().Delay = TruckTimeCheck.value;
-
-        Trucks.Add(TempTruck.GetComponent<TruckControls>());
-        TruckAdded = true;
-    }
 
 
 
@@ -114,16 +77,6 @@ public class Gamemanager : MonoBehaviour
         PlayerObj.transform.localPosition = new Vector2(XRoad[4].transform.localPosition.x, RoadList[0].transform.localPosition.y);
 
 
-        ChickenWalk.alpha = 0;
-        ChickenWalk.blocksRaycasts = false;
-        TruckPlace.alpha = 0;
-        TruckPlace.blocksRaycasts = false;
-
-
-
-
-
-
         if (GameEnded)
         {
             GameEnded = false;
@@ -131,11 +84,6 @@ public class Gamemanager : MonoBehaviour
             dataIndex = 0;
             if (Level % 2 == 0)
             {
-                for (int i = 0; i < Trucks.Count; i++)
-                {
-                    Trucks[i].SetInMotion();
-                }
-
                 TimerTemp = 0;
             }
             else
@@ -143,16 +91,9 @@ public class Gamemanager : MonoBehaviour
 
                 TimerTemp = 0;
 
-
-                for (int i = 0; i < Trucks.Count; i++)
-                {
-                    Trucks[i].SetInMotion();
-                }
-
                 PlayerIndexY = 0;
                 PlayerIndexX = 4;
-                
-
+               
                 SavedData.Clear();
                 PlayerSaving temp = new PlayerSaving();
                 temp.TimeToSave = 0;
@@ -279,12 +220,6 @@ public class Gamemanager : MonoBehaviour
 
             Debug.Log("Run Over");
 
-            Gameover.alpha = 1;
-            Gameover.blocksRaycasts = true;
-
-
-
-
             return;
         }
 
@@ -299,16 +234,6 @@ public class Gamemanager : MonoBehaviour
             PlayerButtonCanvas.alpha = 0;
             PlayerButtonCanvas.blocksRaycasts = false;
             RoadParent.GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-
-            TruckTimeCheck.minValue = -0.1f;
-            TruckTimeCheck.maxValue = TimerTemp;
-
-            ChickenWalk.alpha = 0;
-            ChickenWalk.blocksRaycasts = false;
-            TruckPlace.alpha = 1;
-            TruckPlace.blocksRaycasts = true;
-            TruckAdded = false;
         }
         else
         {
@@ -316,10 +241,6 @@ public class Gamemanager : MonoBehaviour
             PlayerButtonCanvas.blocksRaycasts = true;
             RoadParent.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
-            ChickenWalk.alpha = 1;
-            ChickenWalk.blocksRaycasts = true;
-            TruckPlace.alpha = 0;
-            TruckPlace.blocksRaycasts = false;
         }
 
 
@@ -333,37 +254,37 @@ public class Gamemanager : MonoBehaviour
 
     public void OnvalueChange()
     {
-        if (Level % 2 == 0)
-        {
-            if (dataIndex >= SavedData.Count)
-            {
-                dataIndex = SavedData.Count - 1;
-            }
+        //if (Level % 2 == 0)
+        //{
+        //    if (dataIndex >= SavedData.Count)
+        //    {
+        //        dataIndex = SavedData.Count - 1;
+        //    }
 
-            int previous = dataIndex - 1;
-            if (previous < 0)
-            {
-                previous = 0;
-            }
+        //    int previous = dataIndex - 1;
+        //    if (previous < 0)
+        //    {
+        //        previous = 0;
+        //    }
 
-            if (TruckTimeCheck.value >= SavedData[dataIndex].TimeToSave)
-            {
-                PlayerObj.transform.localPosition = SavedData[dataIndex].PositionToSave;
-                dataIndex++;
-            }
-            else if (TruckTimeCheck.value < SavedData[previous].TimeToSave)
-            {
-                dataIndex--;
-                if (dataIndex < 0)
-                {
-                    dataIndex = 0;
-                }
-                PlayerObj.transform.localPosition = SavedData[dataIndex].PositionToSave;
+        //    if (TruckTimeCheck.value >= SavedData[dataIndex].TimeToSave)
+        //    {
+        //        PlayerObj.transform.localPosition = SavedData[dataIndex].PositionToSave;
+        //        dataIndex++;
+        //    }
+        //    else if (TruckTimeCheck.value < SavedData[previous].TimeToSave)
+        //    {
+        //        dataIndex--;
+        //        if (dataIndex < 0)
+        //        {
+        //            dataIndex = 0;
+        //        }
+        //        PlayerObj.transform.localPosition = SavedData[dataIndex].PositionToSave;
 
-            }
+        //    }
 
 
-        }
+        //}
     }
 
 
@@ -401,7 +322,7 @@ public class Gamemanager : MonoBehaviour
             return;
         }
 
-        LevelText.text = Level.ToString();
+       // LevelText.text = Level.ToString();
 
         if (!GameEnded)
         {
@@ -454,7 +375,7 @@ public class Gamemanager : MonoBehaviour
         timeToDisplay += 1;
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-        TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+       // TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }
 
