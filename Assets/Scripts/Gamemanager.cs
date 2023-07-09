@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Gamemanager : MonoBehaviour
@@ -27,11 +28,6 @@ public class Gamemanager : MonoBehaviour
     private List<TruckControls> Trucks = new List<TruckControls>();
 
 
-
-    public CanvasGroup ChickenWalk;
-    public CanvasGroup TruckPlace;
-    public Slider TruckTimeCheck;
-
     public List<PlayerSaving> SavedData = new List<PlayerSaving>();
     private int dataIndex = 0;
     bool TruckAdded;
@@ -45,6 +41,12 @@ public class Gamemanager : MonoBehaviour
     public TextMeshProUGUI TimerText;
     public TextMeshProUGUI LevelText;
 
+
+    public CanvasGroup ChickenWalk;
+    public CanvasGroup TruckPlace;
+    public Slider TruckTimeCheck;
+
+    public CanvasGroup Gameover;
 
 
     private void Awake()
@@ -95,7 +97,14 @@ public class Gamemanager : MonoBehaviour
 
     public void DieChickenDie()
     {
+
         GameEnded = true;
+
+        if(Level%2 != 0)
+        {
+            ChickenCouldntReach = true;
+        }
+
         CheckGameover();
 
     }
@@ -269,6 +278,13 @@ public class Gamemanager : MonoBehaviour
         CheckGameover();
     }
 
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+
     public void CheckGameover()
     {
 
@@ -277,6 +293,12 @@ public class Gamemanager : MonoBehaviour
         {
 
             Debug.Log("Run Over");
+
+            Gameover.alpha = 1;
+            Gameover.blocksRaycasts = true;
+
+
+
 
             return;
         }
@@ -420,7 +442,8 @@ public class Gamemanager : MonoBehaviour
                 if (dataIndex >= SavedData.Count)
                 {
                     GameEnded = true;
-                    Debug.Log("Run over");
+                    ChickenCouldntReach = true;
+                    CheckGameover();
 
                 }
             }

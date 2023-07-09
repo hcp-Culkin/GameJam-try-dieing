@@ -17,24 +17,25 @@ public class TruckControls : MonoBehaviour
     public float Delay;
     public Transform FromMarker;
     public Transform ToMarker;
-    private void OnCollisionEnter2D(Collision2D collision)
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.CompareTag("Player"))
+        if (collision.transform.CompareTag("Player"))
         {
             gamemanager.DieChickenDie();
         }
-
     }
 
 
     void Start()
     {
-        
     }
 
 
     public void SetInMotion()
     {
+        transform.DOKill();
         transform.localPosition = FromMarker.localPosition;
         transform.DOLocalMove(ToMarker.localPosition, 2f).SetEase(Ease.Linear).SetDelay(Delay);
     }
