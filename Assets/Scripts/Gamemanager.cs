@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class Gamemanager : MonoBehaviour
 {
+    [Header("UI")]
+    [SerializeField] TextMeshProUGUI objectiveText;
+    [SerializeField] Button playButton;
 
     [Header("Player item")]
     public GameObject PlayerObj;
@@ -28,11 +31,11 @@ public class Gamemanager : MonoBehaviour
     private int dataIndex = 0;
 
     private float TimerTemp = 0;
-    private int Level = 0;
+    public int Level = 0;
     private bool GameEnded = true;
     private bool ChickenCouldntReach = false;
-   // public TextMeshProUGUI TimerText;
-   // public TextMeshProUGUI LevelText;
+    // public TextMeshProUGUI TimerText;
+    // public TextMeshProUGUI LevelText;
 
 
     private void Awake()
@@ -61,7 +64,7 @@ public class Gamemanager : MonoBehaviour
 
         GameEnded = true;
 
-        if(Level%2 != 0)
+        if (Level % 2 != 0)
         {
             ChickenCouldntReach = true;
         }
@@ -80,20 +83,22 @@ public class Gamemanager : MonoBehaviour
         if (GameEnded)
         {
             GameEnded = false;
-
+            playButton.interactable = false;
+            ItemPlacer.Instance.PlacementUI.SetActive(false);
             dataIndex = 0;
+            SetObjectiveText("Cross road");
+
             if (Level % 2 == 0)
             {
                 TimerTemp = 0;
             }
             else
             {
-
                 TimerTemp = 0;
 
                 PlayerIndexY = 0;
                 PlayerIndexX = 4;
-               
+
                 SavedData.Clear();
                 PlayerSaving temp = new PlayerSaving();
                 temp.TimeToSave = 0;
@@ -104,6 +109,11 @@ public class Gamemanager : MonoBehaviour
 
     }
 
+
+    void SetObjectiveText(string newText)
+    {
+        objectiveText.text = $"Objective:\n{newText}";
+    }
 
     public void MovePlayer(bool left = false)
     {
@@ -178,7 +188,7 @@ public class Gamemanager : MonoBehaviour
         //}
 
 
-            PlayerObj.transform.localPosition = new Vector2(XRoad[PlayerIndexX].transform.localPosition.x, RoadList[PlayerIndexY].transform.localPosition.y);
+        PlayerObj.transform.localPosition = new Vector2(XRoad[PlayerIndexX].transform.localPosition.x, RoadList[PlayerIndexY].transform.localPosition.y);
         PlayerSaving temp = new PlayerSaving();
         temp.TimeToSave = TimerTemp;
         temp.PositionToSave = PlayerObj.transform.localPosition;
@@ -214,7 +224,7 @@ public class Gamemanager : MonoBehaviour
     public void CheckGameover()
     {
 
-
+        ItemPlacer.Instance.StopMovement();
         if (ChickenCouldntReach)
         {
 
@@ -230,6 +240,8 @@ public class Gamemanager : MonoBehaviour
 
         if (Level % 2 == 0)
         {
+            SetObjectiveText("Kill Chicken");
+
             dataIndex = 0;
             PlayerButtonCanvas.alpha = 0;
             PlayerButtonCanvas.blocksRaycasts = false;
@@ -294,15 +306,15 @@ public class Gamemanager : MonoBehaviour
     {
 
 
-        if(Input.GetKeyUp(KeyCode.W))
+        if (Input.GetKeyUp(KeyCode.W))
         {
             PlayerJump();
         }
-        if(Input.GetKeyUp(KeyCode.A))
+        if (Input.GetKeyUp(KeyCode.A))
         {
             MovePlayer(true);
         }
-        if(Input.GetKeyUp(KeyCode.D))
+        if (Input.GetKeyUp(KeyCode.D))
         {
             MovePlayer(false);
         }
@@ -322,7 +334,7 @@ public class Gamemanager : MonoBehaviour
             return;
         }
 
-       // LevelText.text = Level.ToString();
+        // LevelText.text = Level.ToString();
 
         if (!GameEnded)
         {
@@ -375,7 +387,7 @@ public class Gamemanager : MonoBehaviour
         timeToDisplay += 1;
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-       // TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        // TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }
 
